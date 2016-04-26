@@ -34,16 +34,29 @@ displacement_x = 0;
 displacement_y = 0;
 
 %% Cross-correlation
+[sizex sizey] = size(A1)
+window = 32/2; % size of interrogation window with 50% overlap
+nx = round(sizex/window)-5;
+ny = round(sizey/window)-5;
+% nx = 58; % number of interrogation windows
+% ny = 82; % number of interrogation windows
 
-
-for x = 16:16:64                   % change to 928 when actually running it
-    for y = 16:16:64              % change to 1311 when actually running it
-        window1 = A1(x:x+31,y:y+31);
-        k = k + 1;
-        window1_loc{k} = [x y];
+for k = 1:nx
+    x = k*window
+% for x = 1:window:(nx*window)
+% for x = 16:16:128                   % change to 928 when actually running it
+%     for y = 1:window:(ny*window)
+       for l = 1:ny
+           y = l*window
+        %     for y = 16:16:128              % change to 1311 when actually running it
+        window1 = A1(x:x+(2*window-1),y:y+(2*window-1));
+%         k = k + 1;
+%         window1_loc{k} = [x y];
 %         for i = 1:64
 %             for j = 1:64
 %                 mid_window = [x+15,y+15]; 
+%         for i = 1:window*4
+%             x1 = i
         for i = x-8:8:x+39
                 s = s + 1;
             for j = y-8:8:y+39
@@ -73,12 +86,17 @@ for x = 16:16:64                   % change to 928 when actually running it
                     displacement_x = x - i;
                     displacement_y = y - j;
                 end
-                for e = 1:58
-                    for f = 1:82
-                        dx(f,e) = displacement_x;
-                        dy(f,e) = displacement_y;
-                    end
-                end
+                
+                dx(x,y) = displacement_x;
+                dy(x,y) = displacement_y;
+                
+                
+%                 for e = 1:58
+%                     for f = 1:82
+%                         dx(f,e) = displacement_x;
+%                         dy(f,e) = displacement_y;
+%                     end
+%                 end
             end
         end  
     end
