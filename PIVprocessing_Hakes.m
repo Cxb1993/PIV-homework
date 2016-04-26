@@ -20,6 +20,13 @@ window1_loc = cell(1, 4800);
 r = 0;
 window2_loc = cell(36, 4800);           % I can take this out - just for testing that it's working
 c = 0;
+important_stuff = cell(5, 4800);
+
+max_correlation = 0;
+max_locationx = 0;
+max_locationy = 0;
+displacement_x = 0;
+displacement_y = 0;
 
 %% Cross-correlation
 
@@ -44,6 +51,15 @@ for x = 16:16:16                   % change to 928 when actually running it
                         cross_correlation = cross_correlation + (intensity1-mean_intensity1)*(intensity2-mean_intensity2);
                     end
                 end
+                if cross_correlation > max_correlation
+                    max_correlation = cross_correlation;
+                    max_locationx = i;
+                    max_locationy = j;
+                    displacement_x = x - i;
+                    displacement_y = y - j;
+                end
+                c = c + 1;
+                important_stuff{c} = [max_correlation max_locationx max_locationy displacement_x displacement_y];
             end
         end         
     end
